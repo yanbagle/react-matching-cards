@@ -1,13 +1,8 @@
 import "../App.css";
 
-export default function Card({ children, onClick, index }) {
+export default function Card({ children, onClick }) {
   return (
-    <button
-      className="Card"
-      onClick={() => {
-        onClick(index);
-      }}
-    >
+    <button className="Card" onClick={onClick}>
       {children}
     </button>
   );

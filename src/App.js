@@ -3,11 +3,51 @@ import "./App.css";
 import Card from "./components/Card";
 
 function App() {
-  const cardsArr = [1, 3, 1, 2, 2, 3, 4, 4];
+  const [cardsArr, setCardsArr] = useState([]);
   const [cards, setCards] = useState({});
   const [prevIndex, setPrevIndex] = useState(-1);
+  const numberOfCards = 8;
 
-  const generateRandomNumbers = () => {};
+  const generateRandomNumbers = () => {
+    if (cardsArr.length) {
+      return;
+    }
+
+    let numberOfRandoms = numberOfCards / 2;
+    const randArr = [];
+    while (numberOfRandoms > 0) {
+      const randNum = Math.floor(Math.random() * 10);
+      // if random number doesn't exist in array
+      // ensures we get a set of unique numbers
+      if (randArr.indexOf(randNum) === -1) {
+        randArr.push(randNum);
+        randArr.push(randNum);
+        numberOfRandoms--;
+      }
+    }
+
+    // shuffle the array
+    // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+    let currentIndex = randArr.length;
+    // While there remain elements to shuffle...
+    while (currentIndex !== 0) {
+      // Pick a remaining element...
+      let randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      // And swap it with the current element.
+      [randArr[currentIndex], randArr[randomIndex]] = [
+        randArr[randomIndex],
+        randArr[currentIndex],
+      ];
+    }
+    console.log(randArr);
+    setCardsArr(randArr);
+  };
+
+  useEffect(() => {
+    generateRandomNumbers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     for (let i = 0; i < cardsArr.length; i++) {
@@ -16,8 +56,8 @@ function App() {
         showNumber: false,
         num: cardsArr[i],
       };
-    }
-  }, {});
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cardsArr.length]);
 
   const onClick = (index) => {
     if (cards[index].matched) {
@@ -27,7 +67,7 @@ function App() {
 
     const cardsCopy = { ...cards };
     if (prevIndex > -1) {
-      // if 2 numbers have been clicked
+      // if 2 cards have been clicked
       if (cards[prevIndex].num === cards[index].num) {
         // if match
         cards[prevIndex].matched = true;
@@ -54,13 +94,14 @@ function App() {
 
   return (
     <div className="App">
-      {cardsArr.map((num, index) => (
-        <Card key={index} onClick={onClick} index={index}>
-          {cards[index] && (cards[index].showNumber || cards[index].matched)
-            ? num
-            : null}
-        </Card>
-      ))}
+      {cardsArr.length &&
+        cardsArr.map((num, index) => (
+          <Card key={index} onClick={onClick.bind(null, index)}>
+            {cards[index] && (cards[index].showNumber || cards[index].matched)
+              ? num
+              : null}
+          </Card>
+        ))}
     </div>
   );
 }
