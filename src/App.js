@@ -40,7 +40,6 @@ function App() {
         randArr[currentIndex],
       ];
     }
-    console.log(randArr);
     setCardsArr(randArr);
   };
 
