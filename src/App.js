@@ -41,22 +41,18 @@ function App() {
       ];
     }
     setCardsArr(randArr);
-  };
 
-  useEffect(() => {
-    generateRandomNumbers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    for (let i = 0; i < cardsArr.length; i++) {
-      cards[i] = {
+    const cardsCopy = {};
+    for (let i = 0; i < randArr.length; i++) {
+      cardsCopy[i] = {
         matched: false,
         showNumber: false,
-        num: cardsArr[i],
+        num: randArr[i],
       };
-    } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cardsArr.length]);
+    }
+
+    setCards(cardsCopy);
+  };
 
   const onClick = (index) => {
     if (cards[index].matched) {
@@ -90,6 +86,8 @@ function App() {
     }
     setCards(cardsCopy);
   };
+
+  generateRandomNumbers();
 
   return (
     <div className="App">
